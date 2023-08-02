@@ -22,11 +22,12 @@ router.post('/createuser',
     ],
     async (req, res) => {
 
+        let success = false;
 
         //if there are errors in validation of length of anything, return bad request and the errors
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });  //status code 400 bhej do and json me ye bhej do
+            return res.status(400).json({  success , errors: errors.array() });  //status code 400 bhej do and json me ye bhej do
         }
 
         //this will be for checking if the email already exists in the system
@@ -37,7 +38,7 @@ router.post('/createuser',
 
             // if user exists
             if (user) {
-                return res.status(400).json({ error: "This email already exists" })
+                return res.status(400).json({ success ,  error: "This email already exists" })
             }
 
             //creating a salt using function geSalt, i.e. generating salt
@@ -61,7 +62,8 @@ router.post('/createuser',
             const authToken = jwt.sign(data, JWT_SECRET); //isse ek token generate hoga, and jab bhi mujhe vapis milega, mai usse ye upar waala data retrieve kar sakta hu aur ye  bhi pata kar paaunga ki temper hua hai kya data ya nahi with the secret by using .verify method
 
             // res.json(user) //thunder client par json dikega
-            res.json({ authToken })
+            success = true;
+            res.json({ success , authToken })
 
         } catch (error) {
             console.error(error.message);
@@ -93,6 +95,8 @@ router.post('/login',
     ],
     async (req, res) => {
 
+        let success = false;
+
         //if there are errors in validation of length of anything, return bad request and the errors
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -108,6 +112,7 @@ router.post('/login',
 
             //agr is email ka koi user naghi milta hume in our database
             if (!user) {
+                success = false;
                 return res.status(400).json({ error: "INCORRECT credentials, please check and try again" });
             }
 
@@ -115,10 +120,11 @@ router.post('/login',
             const passwordCompare = await bcrypt.compare(password, user.password);  //comapring the entered password with user passowrd
 
             if (!passwordCompare) {
-                return res.status(400).json({ error: "INCORRECT credentials, please check and try again" });
+                success = false;
+                return res.status(400).json({ success , error: "INCORRECT credentials, please check and try again" });
             }
 
-            //correct crendentials, email matches with passowrd, so now we will send data
+            //idhar tak pahuch gaye means, correct crendentials, email matches with passowrd, so now we will send data
             const data = {
                 user: {
                     id: user.id  //ye waali id DB se aa rahi hai, sabke id alg hoti hai na and with id we can retirve the data in the fastest way from DB
@@ -126,7 +132,9 @@ router.post('/login',
             }
 
             const authToken = jwt.sign(data, JWT_SECRET);
-            res.json({ authToken })
+            success = true;
+            let userName = user.name   //hum user ka naam bhi bhej rahe hai to display it on logged-in screen
+            res.json({ userName, success , authToken })
 
         } catch (error) {
             console.error(error.message);
