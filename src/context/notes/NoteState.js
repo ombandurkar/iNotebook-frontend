@@ -36,7 +36,7 @@ const NoteState = (props) => {
 
     const host = "https://inotebook-backend-e4m1.onrender.com"
 
-    const notesInitial = [];
+    const notesInitial = [[]];
 
     const [notes, setNotes] = useState(notesInitial);
 
