@@ -18,7 +18,7 @@ const Signup = (props) => {
         // eslint-disable-next-line
         const { name, email, password } = credentials;  //destructuring kar rahe hai
 
-        const response = await fetch(`http://localhost:5000/api/auth/createuser`, {
+        const response = await fetch(`https://inotebook-backend-e4m1.onrender.com/api/auth/createuser`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
