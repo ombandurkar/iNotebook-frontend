@@ -34,7 +34,7 @@ const NoteState = (props) => {
 
     //****************paste here**************** */
 
-    const host = "http://localhost:5000"
+    const host = "https://inotebook-backend-e4m1.onrender.com"
 
     const notesInitial = [];
 
