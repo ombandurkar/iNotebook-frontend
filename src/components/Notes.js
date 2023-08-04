@@ -91,7 +91,7 @@ const Notes = (props) => {
                     {notes.length === 0 && 'No Notes to display'}
                     {/* //jab hamare paas ele me kuch nahi hota hai in terniary operator tab hum && ye laga dete hai */}
                 </div>
-                {notes.map((note) => {
+                {notes.forEach((note) => {
                     return <Noteitem key={note._id} updateNote={updateNote} showAlert={props.showAlert} note={note} />
                 })} 
             </div>
